@@ -1,0 +1,207 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Aptitude Practice - Placement Preparation Hub{% endblock %}
+{% block page_heading %}Aptitude Practice Hub{% endblock %}
+{% block page_subheading %}Master quantitative aptitude, logical reasoning, and verbal ability with timed practice tests{% endblock %}
+
+{% block dashboard_content %}
+<!-- APTITUDE CATEGORIES GRID -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+  
+  <!-- 1. Quantitative Aptitude -->
+  <div class="aptitude-category-card">
+    <div>
+      <div class="apt-card-top">
+        <div class="apt-badge-icon">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <span class="badge badge-applied">{{ q_count_map.get('Quantitative', 10) }} Questions</span>
+      </div>
+      <h3 class="apt-card-title">Quantitative Aptitude</h3>
+      <p class="apt-card-desc">
+        Time & Work, Percentages, Profit & Loss, Speed & Distance, Averages, Simple & Compound Interest, and Probability.
+      </p>
+    </div>
+
+    <div>
+      <div class="apt-card-stats">
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Quantitative', {}).get('test_count', 0) }}</strong>
+          <span>Tests Taken</span>
+        </div>
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Quantitative', {}).get('avg_score', 0)|round(1) }}%</strong>
+          <span>Avg Score</span>
+        </div>
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Quantitative', {}).get('best_score', 0)|round(1) }}%</strong>
+          <span>Best Score</span>
+        </div>
+      </div>
+      <a href="{{ url_for('aptitude_practice', category='Quantitative', limit=10) }}" class="btn btn-primary" style="width: 100%;">
+        <i class="fas fa-play"></i> Start Quantitative Quiz
+      </a>
+    </div>
+  </div>
+
+  <!-- 2. Logical Reasoning -->
+  <div class="aptitude-category-card">
+    <div>
+      <div class="apt-card-top">
+        <div class="apt-badge-icon" style="background:#ede9fe; color:#7c3aed;">
+          <i class="fas fa-project-diagram"></i>
+        </div>
+        <span class="badge badge-shortlisted">{{ q_count_map.get('Logical Reasoning', 10) }} Questions</span>
+      </div>
+      <h3 class="apt-card-title">Logical Reasoning</h3>
+      <p class="apt-card-desc">
+        Number Series, Blood Relations, Coding-Decoding, Syllogisms, Seating Arrangement, Direction Sense, and Analogies.
+      </p>
+    </div>
+
+    <div>
+      <div class="apt-card-stats">
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Logical Reasoning', {}).get('test_count', 0) }}</strong>
+          <span>Tests Taken</span>
+        </div>
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Logical Reasoning', {}).get('avg_score', 0)|round(1) }}%</strong>
+          <span>Avg Score</span>
+        </div>
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Logical Reasoning', {}).get('best_score', 0)|round(1) }}%</strong>
+          <span>Best Score</span>
+        </div>
+      </div>
+      <a href="{{ url_for('aptitude_practice', category='Logical Reasoning', limit=10) }}" class="btn btn-primary" style="width: 100%;">
+        <i class="fas fa-play"></i> Start Logical Quiz
+      </a>
+    </div>
+  </div>
+
+  <!-- 3. Verbal Ability -->
+  <div class="aptitude-category-card">
+    <div>
+      <div class="apt-card-top">
+        <div class="apt-badge-icon" style="background:#fef3c7; color:#d97706;">
+          <i class="fas fa-spell-check"></i>
+        </div>
+        <span class="badge badge-interview">{{ q_count_map.get('Verbal Ability', 10) }} Questions</span>
+      </div>
+      <h3 class="apt-card-title">Verbal Ability</h3>
+      <p class="apt-card-desc">
+        Synonyms, Antonyms, Sentence Correction, Idioms & Phrases, Spotting Errors, Active/Passive Voice, and Comprehension.
+      </p>
+    </div>
+
+    <div>
+      <div class="apt-card-stats">
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Verbal Ability', {}).get('test_count', 0) }}</strong>
+          <span>Tests Taken</span>
+        </div>
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Verbal Ability', {}).get('avg_score', 0)|round(1) }}%</strong>
+          <span>Avg Score</span>
+        </div>
+        <div class="apt-stat-col">
+          <strong>{{ category_stats.get('Verbal Ability', {}).get('best_score', 0)|round(1) }}%</strong>
+          <span>Best Score</span>
+        </div>
+      </div>
+      <a href="{{ url_for('aptitude_practice', category='Verbal Ability', limit=10) }}" class="btn btn-primary" style="width: 100%;">
+        <i class="fas fa-play"></i> Start Verbal Quiz
+      </a>
+    </div>
+  </div>
+
+  <!-- 4. Mixed Full Mock Test -->
+  <div class="aptitude-category-card" style="border: 2px solid var(--teal-primary); background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);">
+    <div>
+      <div class="apt-card-top">
+        <div class="apt-badge-icon" style="background:var(--teal-primary); color:#ffffff;">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <span class="badge badge-selected">Placement Mock</span>
+      </div>
+      <h3 class="apt-card-title">Full Placement Mock</h3>
+      <p class="apt-card-desc">
+        Simulated campus placement exam containing a randomized combination of Quantitative, Logical, and Verbal questions.
+      </p>
+    </div>
+
+    <div>
+      <div class="apt-card-stats">
+        <div class="apt-stat-col">
+          <strong>15 Qs</strong>
+          <span>Test Length</span>
+        </div>
+        <div class="apt-stat-col">
+          <strong>15 Mins</strong>
+          <span>Time Limit</span>
+        </div>
+        <div class="apt-stat-col">
+          <strong>All</strong>
+          <span>Topics</span>
+        </div>
+      </div>
+      <a href="{{ url_for('aptitude_practice', category='all', limit=15) }}" class="btn btn-dark" style="width: 100%;">
+        <i class="fas fa-fire"></i> Start Full Mock Test
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIOUS TEST RESULTS TABLE -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fas fa-history"></i> Practice Test History & Scores
+    </div>
+  </div>
+  <div class="card-body" style="padding: 0;">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date & Time</th>
+            <th>Category</th>
+            <th>Questions Attempted</th>
+            <th>Score</th>
+            <th>Accuracy %</th>
+            <th>Performance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for res in history %}
+            <tr>
+              <td style="color:var(--text-muted); font-size:0.88rem;">{{ res.completed_at[:16] }}</td>
+              <td><strong>{{ res.category }}</strong></td>
+              <td>{{ res.total_questions }} Questions</td>
+              <td><strong style="color:var(--navy-dark);">{{ res.score }} / {{ res.total_questions }}</strong></td>
+              <td>
+                <span style="font-weight:700; color:{% if res.percentage >= 80 %}#059669{% elif res.percentage >= 60 %}#d97706{% else %}#dc2626{% endif %};">
+                  {{ res.percentage }}%
+                </span>
+              </td>
+              <td>
+                <span class="badge {% if res.percentage >= 80 %}badge-selected{% elif res.percentage >= 60 %}badge-interview{% else %}badge-rejected{% endif %}">
+                  {% if res.percentage >= 80 %}Excellent{% elif res.percentage >= 60 %}Good{% else %}Needs Practice{% endif %}
+                </span>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                <i class="fas fa-tasks" style="font-size:2rem; margin-bottom:0.5rem; display:block;"></i>
+                No aptitude tests attempted yet. Click any category above to begin practicing!
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

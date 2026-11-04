@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - Student Placement Tracker{% endblock %}
+
+{% block content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 10%, #172c4c 0%, #0b192c 80%, #070e17 100%); padding: 2rem 1rem;">
+  <div style="width: 100%; max-width: 440px; background: #ffffff; border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); overflow: hidden; border: 1px solid var(--border-light);">
+    
+    <!-- Header -->
+    <div style="background: var(--navy-dark); color: #ffffff; padding: 2.25rem 2rem; text-align: center; border-bottom: 3px solid var(--teal-primary);">
+      <div style="width: 50px; height: 50px; background: linear-gradient(135deg, var(--teal-primary), var(--teal-dark)); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ffffff; margin: 0 auto 1rem; box-shadow: 0 4px 12px var(--teal-glow);">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem;">Student Portal Sign In</h2>
+      <p style="font-size: 0.85rem; color: #94a3b8;">Enter your credentials to access your dashboard</p>
+    </div>
+
+    <!-- Body -->
+    <div style="padding: 2rem;">
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-container">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                <span>{{ message }}</span>
+                <button type="button" class="alert-close">&times;</button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('login') }}" method="POST" id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="email">Student Email Address</label>
+          <div style="position: relative;">
+            <input type="email" id="email" name="email" class="form-control" placeholder="name@college.edu" required style="padding-left: 2.5rem;">
+            <i class="fas fa-envelope" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-light);"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div style="position: relative;">
+            <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required style="padding-left: 2.5rem;">
+            <i class="fas fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-light);"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;">
+          <i class="fas fa-sign-in-alt"></i> Sign In to Dashboard
+        </button>
+      </form>
+
+      <!-- Instant Demo Login Helper -->
+      <div style="margin-top: 1.5rem; padding: 0.9rem; background-color: var(--bg-subtle); border-radius: var(--radius-md); border: 1px dashed var(--teal-light); text-align: center;">
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">
+          ⚡ Quick Evaluator Demo Account
+        </span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="fillDemoCredentials()" style="width: 100%;">
+          <i class="fas fa-magic" style="color: var(--teal-primary);"></i> Auto-fill Demo (demo@student.edu)
+        </button>
+      </div>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: var(--text-muted);">
+        Don't have an account yet? 
+        <a href="{{ url_for('register') }}" style="font-weight: 700; color: var(--teal-primary);">Create one here</a>
+      </div>
+
+      <div style="text-align: center; margin-top: 1rem; font-size: 0.82rem;">
+        <a href="{{ url_for('index') }}" style="color: var(--text-light);">
+          <i class="fas fa-arrow-left"></i> Back to Homepage
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function fillDemoCredentials() {
+  document.getElementById("email").value = "demo@student.edu";
+  document.getElementById("password").value = "demo123";
+}
+</script>
+{% endblock %}

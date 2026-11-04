@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="{{ url_for('dashboard') }}" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div class="brand-text">
+          Placement<span>Track</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-title">Core Modules</div>
+      <ul class="nav-list">
+        <li class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+          <a href="{{ url_for('dashboard') }}" class="nav-link">
+            <i class="fas fa-chart-pie"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item {% if 'aptitude' in request.endpoint %}active{% endif %}">
+          <a href="{{ url_for('aptitude_index') }}" class="nav-link">
+            <i class="fas fa-brain"></i>
+            <span>Aptitude Practice</span>
+          </a>
+        </li>
+        <li class="nav-item {% if 'coding' in request.endpoint %}active{% endif %}">
+          <a href="{{ url_for('coding_index') }}" class="nav-link">
+            <i class="fas fa-code"></i>
+            <span>Coding Tracker</span>
+          </a>
+        </li>
+        <li class="nav-item {% if 'jobs' in request.endpoint %}active{% endif %}">
+          <a href="{{ url_for('jobs_index') }}" class="nav-link">
+            <i class="fas fa-briefcase"></i>
+            <span>Job Applications</span>
+          </a>
+        </li>
+        <li class="nav-item {% if 'interview' in request.endpoint %}active{% endif %}">
+          <a href="{{ url_for('interview_index') }}" class="nav-link">
+            <i class="fas fa-comments"></i>
+            <span>Interview Prep</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-section-title">Account & Settings</div>
+      <ul class="nav-list">
+        <li class="nav-item {% if 'profile' in request.endpoint %}active{% endif %}">
+          <a href="{{ url_for('profile_index') }}" class="nav-link">
+            <i class="fas fa-user-circle"></i>
+            <span>Student Profile</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url_for('logout') }}" class="nav-link">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Student Profile Chip in Sidebar -->
+    <div class="sidebar-footer">
+      <div class="user-profile-badge">
+        <div class="user-avatar">
+          {{ current_student.name[0] if current_student and current_student.name else 'S' }}
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ current_student.name if current_student else 'Student' }}</div>
+          <div class="user-role">{{ current_student.target_role if current_student else 'Candidate' }}</div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="logout-btn" title="Sign Out">
+          <i class="fas fa-power-off"></i>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <div class="main-content">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-toggle-btn" id="mobileToggle" aria-label="Toggle Navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="page-title">
+          <h1>{% block page_heading %}Dashboard{% endblock %}</h1>
+          <p>{% block page_subheading %}Student Placement Preparation & Tracking Hub{% endblock %}</p>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        {% if metrics is defined and metrics.readiness_score is defined %}
+        <div class="readiness-pill" title="Calculated from Aptitude accuracy, Coding problems solved, Job pipeline & Interview preparation">
+          <i class="fas fa-bolt" style="color: var(--teal-primary);"></i>
+          <span>Readiness Score:</span>
+          <span class="score">{{ metrics.readiness_score }}%</span>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('profile_index') }}" class="btn btn-secondary btn-sm">
+          <i class="fas fa-user"></i> My Profile
+        </a>
+      </div>
+    </header>
+
+    <!-- CONTENT AREA -->
+    <main class="content-area">
+      <!-- FLASH NOTIFICATIONS -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-container">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                <span>
+                  {% if category == 'success' %}<i class="fas fa-check-circle" style="margin-right:0.5rem;"></i>{% endif %}
+                  {% if category == 'danger' %}<i class="fas fa-exclamation-triangle" style="margin-right:0.5rem;"></i>{% endif %}
+                  {% if category == 'info' %}<i class="fas fa-info-circle" style="margin-right:0.5rem;"></i>{% endif %}
+                  {{ message }}
+                </span>
+                <button type="button" class="alert-close">&times;</button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block dashboard_content %}{% endblock %}
+    </main>
+  </div>
+</div>
+{% endblock %}

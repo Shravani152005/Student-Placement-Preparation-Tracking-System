@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}PlacementTrack - Student Placement Preparation & Tracking System{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- LANDING HEADER / NAVBAR -->
+<header class="landing-header">
+  <nav class="landing-nav">
+    <a href="{{ url_for('index') }}" class="landing-brand">
+      <div class="brand-icon">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <div>Placement<span>Track</span></div>
+    </a>
+
+    <ul class="landing-nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#modules">Preparation Modules</a></li>
+      <li><a href="#workflow">How It Works</a></li>
+    </ul>
+
+    <div class="landing-auth-btns">
+      <a href="{{ url_for('login') }}" class="btn btn-secondary btn-sm">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </a>
+      <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-user-plus"></i> Register
+      </a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <div class="hero-container">
+    <div class="hero-pill">
+      <i class="fas fa-rocket"></i> All-In-One Campus Placement Preparation Suite
+    </div>
+    
+    <h1 class="hero-title">
+      Crack Your Dream Placement With <span class="gradient-text">Data-Driven Preparation</span>
+    </h1>
+    
+    <p class="hero-subtitle">
+      A complete, modern SaaS platform designed for college students. Practice aptitude tests with automated evaluations, monitor coding milestones, manage corporate job applications, and master interview questions.
+    </p>
+
+    <div class="hero-actions">
+      <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-arrow-right"></i> Get Started Free
+      </a>
+      <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg">
+        <i class="fas fa-laptop-code"></i> Live Demo Login
+      </a>
+    </div>
+
+    <!-- Stats Banner -->
+    <div class="hero-stats-banner">
+      <div class="hero-stat-item">
+        <h3>30<span>+</span></h3>
+        <p>Aptitude Questions</p>
+      </div>
+      <div class="hero-stat-item">
+        <h3>5<span>+</span></h3>
+        <p>Tech & HR Categories</p>
+      </div>
+      <div class="hero-stat-item">
+        <h3>5</h3>
+        <p>Job Pipeline Stages</p>
+      </div>
+      <div class="hero-stat-item">
+        <h3>100<span>%</span></h3>
+        <p>SQLite Data Persistence</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN FEATURES SECTION -->
+<section class="features-section" id="features">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-tag">Powerful Capabilities</span>
+      <h2 class="section-title">Engineered For College Placement Success</h2>
+      <p class="section-description">
+        Eliminate messy spreadsheets and scattered notes. Keep your entire placement preparation journey synchronized under one unified SaaS dashboard.
+      </p>
+    </div>
+
+    <div class="features-grid" id="modules">
+      <!-- 1. Aptitude Practice -->
+      <div class="feature-box">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h3 class="feature-title">Aptitude Practice Engine</h3>
+        <p class="feature-text">
+          Practice multiple-choice questions across Quantitative Aptitude, Logical Reasoning, and Verbal Ability. Features automatic scoring, countdown timer, and comprehensive step-by-step solutions.
+        </p>
+      </div>
+
+      <!-- 2. Coding Problem Tracker -->
+      <div class="feature-box">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3 class="feature-title">Coding Practice Tracker</h3>
+        <p class="feature-text">
+          Log problems solved across LeetCode, HackerRank, and GeeksforGeeks. Tag by programming language, difficulty (Easy, Medium, Hard), and status (Solved, In Progress, Need Revision).
+        </p>
+      </div>
+
+      <!-- 3. Job CRM Pipeline -->
+      <div class="feature-box">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <h3 class="feature-title">Job Application Pipeline</h3>
+        <p class="feature-text">
+          Track companies and roles applied for. Organize by stages: Applied, Shortlisted, Technical Interview, Selected, and Rejected. Record CTC packages, links, and interview notes.
+        </p>
+      </div>
+
+      <!-- 4. Curated Interview Bank -->
+      <div class="feature-box">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-comments"></i>
+        </div>
+        <h3 class="feature-title">Interview Preparation Hub</h3>
+        <p class="feature-text">
+          Master top campus placement interview questions categorized by Java, Python, SQL, OOPs, and HR. Includes STAR method answers and interviewer tips with progress tracking.
+        </p>
+      </div>
+
+      <!-- 5. Placement Readiness Metric -->
+      <div class="feature-box">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3 class="feature-title">Dynamic Placement Analytics</h3>
+        <p class="feature-text">
+          Visual dashboards powered by Chart.js. Track aptitude score progression trends, job application conversion funnels, and your composite Placement Readiness Score.
+        </p>
+      </div>
+
+      <!-- 6. Student Profile & Goals -->
+      <div class="feature-box">
+        <div class="feature-icon-wrapper">
+          <i class="fas fa-id-card"></i>
+        </div>
+        <h3 class="feature-title">Student Profile Management</h3>
+        <p class="feature-text">
+          Maintain your college credentials, branch, target job roles, CGPA, GitHub, and LinkedIn profiles. Fully secured with password hashing and session tokens.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW SECTION -->
+<section class="features-section" id="workflow" style="background-color: var(--bg-app); border-top: 1px solid var(--border-light);">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-tag">Simple 3-Step Process</span>
+      <h2 class="section-title">How PlacementTrack Works</h2>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-box" style="text-align:center;">
+        <div style="font-size:2rem; font-weight:800; color:var(--teal-primary); margin-bottom:1rem;">01</div>
+        <h3 class="feature-title">Register & Setup</h3>
+        <p class="feature-text">Create your account with your college name and target job role to initialize your personalized database tracker.</p>
+      </div>
+      <div class="feature-box" style="text-align:center;">
+        <div style="font-size:2rem; font-weight:800; color:var(--teal-primary); margin-bottom:1rem;">02</div>
+        <h3 class="feature-title">Practice & Log</h3>
+        <p class="feature-text">Take timed aptitude tests, log daily algorithmic coding challenges, and study curated technical & HR Q&A.</p>
+      </div>
+      <div class="feature-box" style="text-align:center;">
+        <div style="font-size:2rem; font-weight:800; color:var(--teal-primary); margin-bottom:1rem;">03</div>
+        <h3 class="feature-title">Track & Succeed</h3>
+        <p class="feature-text">Monitor your application stages from Applied to Offer Letter, watch your readiness score climb, and land your offer!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section">
+  <div class="cta-box">
+    <h2 class="cta-title">Ready To Accelerate Your Placement Preparation?</h2>
+    <p class="cta-subtitle">Join thousands of students building their engineering careers with structured tracking.</p>
+    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+      <i class="fas fa-user-plus"></i> Create Student Account Now
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="landing-footer">
+  <div class="footer-container">
+    <div class="landing-brand">
+      <div class="brand-icon">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <div>Placement<span>Track</span></div>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 Student Placement Preparation & Tracking System. Built with Flask, SQLite, HTML5, CSS3, & Chart.js.
+    </div>
+  </div>
+</footer>
+{% endblock %}

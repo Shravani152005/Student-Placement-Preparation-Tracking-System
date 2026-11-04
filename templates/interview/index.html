@@ -1,0 +1,96 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Interview Preparation Hub - PlacementTrack{% endblock %}
+{% block page_heading %}Interview Preparation Hub{% endblock %}
+{% block page_subheading %}Curated Technical and HR interview questions with sample model answers, expert tips, and progress tracking{% endblock %}
+
+{% block dashboard_content %}
+<!-- 1. CATEGORY PILL TABS -->
+<div class="interview-tabs">
+  <a href="{{ url_for('interview_index', category='all') }}" class="tab-btn {% if category_filter == 'all' %}active{% endif %}">
+    <i class="fas fa-layer-group"></i> All Topics
+    <span class="tab-badge">{{ questions|length }}</span>
+  </a>
+
+  {% for cat in cat_summary %}
+    <a href="{{ url_for('interview_index', category=cat.category) }}" class="tab-btn {% if category_filter == cat.category %}active{% endif %}">
+      {% if cat.category == 'Java' %}<i class="fab fa-java" style="color:#f89820;"></i>{% endif %}
+      {% if cat.category == 'Python' %}<i class="fab fa-python" style="color:#3776ab;"></i>{% endif %}
+      {% if cat.category == 'SQL' %}<i class="fas fa-database" style="color:#0284c7;"></i>{% endif %}
+      {% if cat.category == 'OOPs' %}<i class="fas fa-cubes" style="color:#8b5cf6;"></i>{% endif %}
+      {% if cat.category == 'HR' %}<i class="fas fa-user-tie" style="color:#10b981;"></i>{% endif %}
+      {{ cat.category }}
+      <span class="tab-badge" title="Mastered / Total">{{ cat.mastered }}/{{ cat.total }}</span>
+    </a>
+  {% endfor %}
+</div>
+
+<!-- 2. SEARCH & SUMMARY BAR -->
+<div class="filter-bar" style="margin-bottom: 1.5rem;">
+  <div class="search-box" style="flex:1;">
+    <i class="fas fa-search"></i>
+    <input type="text" id="interviewSearchInput" class="form-control" placeholder="Search questions, concepts, keywords..." value="{{ search_query }}">
+  </div>
+  <div style="font-size:0.88rem; color:var(--text-muted); font-weight:600;">
+    Click on any question card to reveal model answers and interviewer tips.
+  </div>
+</div>
+
+<!-- 3. ACCORDION QUESTION LIST -->
+<div>
+  {% for q in questions %}
+    <div class="interview-card {% if loop.first and not search_query %}open{% endif %}">
+      <div class="interview-card-header">
+        <div style="flex: 1;">
+          <div class="interview-badges" style="margin-bottom: 0.4rem;">
+            <span class="badge badge-applied">{{ q.category }}</span>
+            <span class="badge" style="background:#f1f5f9; color:var(--text-main);">{{ q.topic }}</span>
+            <span class="badge badge-{{ q.difficulty.lower() }}">{{ q.difficulty }}</span>
+            {% if q.is_mastered %}
+              <span class="badge badge-selected"><i class="fas fa-check"></i> Mastered</span>
+            {% endif %}
+          </div>
+          <h3 class="interview-q-title">
+            {{ loop.index }}. {{ q.question_text }}
+          </h3>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <!-- Mark Mastered Toggle Button -->
+          <form action="{{ url_for('interview_toggle_mastered', question_id=q.id) }}" method="POST" style="display:inline;" onclick="event.stopPropagation();">
+            <button type="submit" class="btn btn-sm {% if q.is_mastered %}btn-primary{% else %}btn-secondary{% endif %}" title="Toggle Mastered">
+              <i class="fas {% if q.is_mastered %}fa-check-circle{% else %}fa-circle{% endif %}"></i>
+              {% if q.is_mastered %}Mastered{% else %}Mark Mastered{% endif %}
+            </button>
+          </form>
+
+          <i class="fas fa-chevron-down toggle-icon" style="font-size: 1.1rem; padding: 0.5rem;"></i>
+        </div>
+      </div>
+
+      <!-- Expandable Answer Body -->
+      <div class="interview-answer">
+        <strong style="color: var(--teal-primary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.4rem;">
+          <i class="fas fa-align-left"></i> Model Answer & Explanation:
+        </strong>
+        <div>{{ q.answer_text }}</div>
+
+        {% if q.tips %}
+          <div class="interview-tip">
+            <strong><i class="fas fa-lightbulb"></i> Interviewer Pro-Tip:</strong> {{ q.tips }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <div class="card" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+      <i class="fas fa-comments" style="font-size: 2.5rem; margin-bottom: 0.75rem; display:block; color:var(--text-light);"></i>
+      No interview questions found for this filter.
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+{% endblock %}

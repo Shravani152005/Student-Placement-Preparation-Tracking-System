@@ -1,0 +1,140 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Aptitude Practice: {{ category }} - PlacementTrack{% endblock %}
+{% block page_heading %}{{ category }} Practice Test{% endblock %}
+{% block page_subheading %}Select the correct option for each question. Solutions and explanations will be shown after submission.{% endblock %}
+
+{% block dashboard_content %}
+<div id="quizContainer" data-category="{{ category }}" style="max-width: 860px; margin: 0 auto;">
+
+  <!-- ================= TEST ACTIVE VIEW ================= -->
+  <div id="quizTestingView">
+    <!-- Top Quiz Navigation & Timer Bar -->
+    <div class="quiz-header-bar">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="{{ url_for('aptitude_index') }}" class="btn btn-secondary btn-sm" onclick="return confirm('Are you sure you want to exit? Your current test progress will be lost.')">
+          <i class="fas fa-arrow-left"></i> Exit Test
+        </a>
+        <div style="font-size: 0.95rem; font-weight: 700; color: var(--navy-dark);">
+          Question <span id="currentQuestionNum">1</span> of {{ total_questions }}
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <div class="timer-box" title="Time elapsed">
+          <i class="fas fa-stopwatch"></i>
+          <span id="timerDisplay">00:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Questions Loop -->
+    {% for q in questions %}
+      <div class="question-card question-box" data-question-id="{{ q.id }}" style="display: {% if loop.first %}block{% else %}none{% endif %};">
+        <div class="question-meta">
+          <span class="badge badge-applied">{{ q.category }}</span>
+          <span class="badge badge-easy">{{ q.topic }}</span>
+          <span class="badge badge-{{ q.difficulty.lower() }}">{{ q.difficulty }}</span>
+        </div>
+
+        <h3 class="question-title">
+          Q{{ loop.index }}. {{ q.question_text }}
+        </h3>
+
+        <!-- 4 Options (A, B, C, D) -->
+        <div class="options-list">
+          <div class="option-item" data-option="A">
+            <div class="option-key">A</div>
+            <div class="option-text">{{ q.option_a }}</div>
+          </div>
+
+          <div class="option-item" data-option="B">
+            <div class="option-key">B</div>
+            <div class="option-text">{{ q.option_b }}</div>
+          </div>
+
+          <div class="option-item" data-option="C">
+            <div class="option-key">C</div>
+            <div class="option-text">{{ q.option_c }}</div>
+          </div>
+
+          <div class="option-item" data-option="D">
+            <div class="option-key">D</div>
+            <div class="option-text">{{ q.option_d }}</div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <!-- Bottom Navigation Controls -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; background-color: #ffffff; padding: 1.25rem 1.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
+      <button type="button" id="prevBtn" class="btn btn-secondary" style="opacity: 0.5;">
+        <i class="fas fa-chevron-left"></i> Previous Question
+      </button>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button type="button" id="nextBtn" class="btn btn-primary">
+          Next Question <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <button type="button" id="submitQuizBtn" class="btn btn-dark" style="display: none; background: #065f46; border-color: #059669;">
+          <i class="fas fa-paper-plane"></i> Submit & View Explanations
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TEST RESULTS & EXPLANATIONS VIEW ================= -->
+  <div id="quizResultsView" style="display: none;">
+    <!-- Score Summary Banner -->
+    <div style="background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-surface) 100%); color: #ffffff; padding: 2.5rem; border-radius: var(--radius-xl); text-align: center; margin-bottom: 2rem; border: 1px solid var(--navy-border); box-shadow: var(--shadow-lg);">
+      <div style="width: 60px; height: 60px; background: rgba(13, 148, 136, 0.2); border: 2px solid var(--teal-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--teal-bright); margin: 0 auto 1rem;">
+        <i class="fas fa-trophy"></i>
+      </div>
+      <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.25rem;">Test Completed!</h2>
+      <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.75rem;">Your results have been saved to your student profile and dashboard analytics.</p>
+
+      <div style="display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap;">
+        <div>
+          <div style="font-size: 2.5rem; font-weight: 800; color: #ffffff;" id="resScore">0</div>
+          <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Score</div>
+        </div>
+        <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+        <div>
+          <div style="font-size: 2.5rem; font-weight: 800; color: #ffffff;" id="resTotal">0</div>
+          <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Total Questions</div>
+        </div>
+        <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
+        <div>
+          <div style="font-size: 2.5rem; font-weight: 800; color: var(--teal-bright);" id="resPercentage">0%</div>
+          <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Accuracy</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <a href="{{ url_for('aptitude_index') }}" class="btn btn-primary" style="margin-right: 0.75rem;">
+          <i class="fas fa-arrow-left"></i> Return to Aptitude Hub
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+          <i class="fas fa-chart-pie"></i> View Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Section Heading -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+      <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--navy-dark);">
+        <i class="fas fa-clipboard-check" style="color: var(--teal-primary);"></i> Detailed Question Review & Step-by-Step Solutions
+      </h3>
+    </div>
+
+    <!-- Review Cards Container (Rendered dynamically by aptitude.js) -->
+    <div id="feedbackReviewList"></div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/aptitude.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,191 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Student Profile - PlacementTrack{% endblock %}
+{% block page_heading %}Student Profile & Settings{% endblock %}
+{% block page_subheading %}Manage your academic details, target placement profile, and security settings{% endblock %}
+
+{% block dashboard_content %}
+<div class="profile-grid">
+  <!-- LEFT COLUMN: STUDENT IDENTITY & STATS -->
+  <div>
+    <!-- Identity Card -->
+    <div class="card profile-avatar-card">
+      <div class="avatar-large">
+        {{ student.name[0] }}
+      </div>
+      <h2 class="profile-name">{{ student.name }}</h2>
+      <div class="profile-role">{{ student.target_role }}</div>
+      <div class="profile-college"><i class="fas fa-university"></i> {{ student.college }}</div>
+
+      <div style="display:flex; justify-content:center; gap:0.75rem; margin-bottom:1.5rem;">
+        {% if student.linkedin %}
+          <a href="{{ student.linkedin }}" target="_blank" class="btn btn-secondary btn-sm" title="LinkedIn Profile">
+            <i class="fab fa-linkedin" style="color:#0a66c2;"></i> LinkedIn
+          </a>
+        {% endif %}
+        {% if student.github %}
+          <a href="{{ student.github }}" target="_blank" class="btn btn-secondary btn-sm" title="GitHub Profile">
+            <i class="fab fa-github" style="color:var(--navy-dark);"></i> GitHub
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Readiness Score Gauge -->
+      <div class="readiness-meter">
+        <div class="meter-header">
+          <span>Placement Readiness</span>
+          <span style="color:var(--teal-primary);">{{ metrics.readiness_score }}%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: {{ metrics.readiness_score }}%;"></div>
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-light); margin-top:0.5rem; text-align:center;">
+          Calculated across Aptitude, Coding, Interview & Job pipelines
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-chart-bar"></i> Preparation Metrics
+        </div>
+      </div>
+      <div class="card-body" style="padding:1.25rem;">
+        <div style="display:flex; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid var(--border-light); font-size:0.9rem;">
+          <span style="color:var(--text-muted);"><i class="fas fa-brain" style="color:var(--teal-primary); width:20px;"></i> Aptitude Accuracy:</span>
+          <strong>{{ metrics.avg_aptitude_pct }}%</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid var(--border-light); font-size:0.9rem;">
+          <span style="color:var(--text-muted);"><i class="fas fa-code" style="color:#10b981; width:20px;"></i> Coding Solved:</span>
+          <strong>{{ metrics.coding_solved }} Problems</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid var(--border-light); font-size:0.9rem;">
+          <span style="color:var(--text-muted);"><i class="fas fa-briefcase" style="color:#3b82f6; width:20px;"></i> Total Job Drives:</span>
+          <strong>{{ metrics.total_jobs }} Applied</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:0.6rem 0; font-size:0.9rem;">
+          <span style="color:var(--text-muted);"><i class="fas fa-comments" style="color:#8b5cf6; width:20px;"></i> Interview Qs Mastered:</span>
+          <strong>{{ metrics.interview_mastered }}/{{ metrics.total_interview_questions }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN: EDIT PROFILE & PASSWORD FORMS -->
+  <div>
+    <!-- Edit Profile Form -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-user-edit"></i> Edit Academic & Personal Details
+        </div>
+      </div>
+      <div class="card-body">
+        <form action="{{ url_for('profile_update') }}" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="name">Full Name *</label>
+              <input type="text" id="name" name="name" class="form-control" value="{{ student.name }}" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="email">Email Address (Read-only)</label>
+              <input type="email" id="email" class="form-control" value="{{ student.email }}" disabled style="background-color:var(--bg-subtle);">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="college">College / University Name *</label>
+              <input type="text" id="college" name="college" class="form-control" value="{{ student.college }}" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="branch">Department / Branch</label>
+              <input type="text" id="branch" name="branch" class="form-control" value="{{ student.branch }}">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="grad_year">Graduation Year</label>
+              <input type="number" id="grad_year" name="grad_year" class="form-control" value="{{ student.grad_year }}">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cgpa">CGPA / Percentage</label>
+              <input type="text" id="cgpa" name="cgpa" class="form-control" value="{{ student.cgpa }}">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone / WhatsApp</label>
+              <input type="text" id="phone" name="phone" class="form-control" value="{{ student.phone }}" placeholder="+91 ...">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="target_role">Target Placement Role</label>
+            <input type="text" id="target_role" name="target_role" class="form-control" value="{{ student.target_role }}">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="linkedin">LinkedIn Profile URL</label>
+              <input type="url" id="linkedin" name="linkedin" class="form-control" value="{{ student.linkedin }}" placeholder="https://linkedin.com/in/...">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="github">GitHub Profile URL</label>
+              <input type="url" id="github" name="github" class="form-control" value="{{ student.github }}" placeholder="https://github.com/...">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bio">Bio & Career Aspirations</label>
+            <textarea id="bio" name="bio" class="form-control" placeholder="Briefly describe your technical strengths and placement goals...">{{ student.bio }}</textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Profile Details
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Change Password Form -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-key"></i> Security & Password
+        </div>
+      </div>
+      <div class="card-body">
+        <form action="{{ url_for('profile_change_password') }}" method="POST">
+          <div class="form-group">
+            <label class="form-label" for="current_password">Current Password *</label>
+            <input type="password" id="current_password" name="current_password" class="form-control" placeholder="••••••••" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="new_password">New Password (Min 6 chars) *</label>
+              <input type="password" id="new_password" name="new_password" class="form-control" placeholder="••••••••" required minlength="6">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="confirm_password">Confirm New Password *</label>
+              <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="••••••••" required minlength="6">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-secondary">
+            <i class="fas fa-shield-alt"></i> Update Password
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
